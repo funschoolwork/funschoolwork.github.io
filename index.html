@@ -3,70 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your GitHub Page</title>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <title>Windows 11 Style Buttons</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f3f3f3;
-            margin: 0;
-            padding: 0;
+            background-color: #0a2540;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-        .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            width: 300px;
-        }
+
         h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 14px;
-            color: #555;
+            color: white;
             margin-bottom: 30px;
         }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 150px);
+            grid-gap: 20px;
+        }
+
         .button {
-            background-color: #0078d4; /* Windows blue */
-            border: none;
-            color: white;
-            padding: 12px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 150px;
+            background-color: #1c1e24;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        .button img {
+            width: 60px;
+            height: 60px;
+        }
+
         .button:hover {
-            background-color: #005a9e;
-            transform: translateY(-2px);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
         }
-        .button:active {
-            transform: translateY(0);
+
+        .button a {
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            display: block;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>Welcome to My GitHub Page!</h1>
-        <p>Click the buttons below to open the links:</p>
-        
-        <a href="https://example.com" class="button" target="_blank">Example Link 1</a>
-        <a href="https://example.org" class="button" target="_blank">Example Link 2</a>
-        <a href="https://example.net" class="button" target="_blank">Example Link 3</a>
+    <h1>My Windows 11 Styled Buttons</h1>
+    <div class="button-grid">
+        <div class="button">
+            <a href="https://www.google.com" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="Google Icon">
+                Google Chrome
+            </a>
+        </div>
+        <div class="button">
+            <a href="https://www.youtube.com" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="YouTube Icon">
+                YouTube
+            </a>
+        </div>
+        <div class="button">
+            <a href="https://store.steampowered.com/" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="Steam Icon">
+                Steam
+            </a>
+        </div>
+        <div class="button">
+            <a href="https://pixelgun3d.com" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="Pixel Gun Icon">
+                Pixel Gun 3D
+            </a>
+        </div>
+        <div class="button">
+            <a href="https://www.opera.com/gx" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="Opera GX Icon">
+                Opera GX
+            </a>
+        </div>
+        <div class="button">
+            <a href="https://geometrydash.io" target="_blank">
+                <img src="https://via.placeholder.com/60" alt="Geometry Dash Icon">
+                Geometry Dash
+            </a>
+        </div>
     </div>
-
 </body>
 </html>
