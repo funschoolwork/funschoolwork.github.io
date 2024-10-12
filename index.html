@@ -6,110 +6,125 @@
     <title>funschoolwork</title>
     <style>
         body {
-            background-color: #0a2540;
+            background: url('https://i.pinimg.com/originals/55/01/60/5501609ee45d514d1f2c4a63502045e2.gif') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
         }
 
         .logo {
-            width: 300px; /* Adjust size of the logo */
-            margin-bottom: 20px;
+            width: 250px;
+            margin-bottom: 30px;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         h1 {
-            color: white;
-            margin-bottom: 30px;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: slideIn 1s ease-in-out;
         }
 
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(3, 150px);
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             grid-gap: 20px;
+            width: 90%;
+            max-width: 800px;
         }
 
         .button {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 150px;
-            height: 150px;
-            background-color: #1c1e24;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .button img {
-            width: 60px;
-            height: 60px;
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+            border-radius: 20px;
+            padding: 20px;
+            height: 180px;
+            transition: transform 0.3s ease, background 0.3s ease;
         }
 
         .button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2); /* Slightly more opaque on hover */
         }
 
         .button a {
             text-decoration: none;
-            color: white;
+            color: #00aaff;
+            font-size: 18px;
+            font-weight: 600;
             text-align: center;
-            font-size: 16px;
-            display: block;
             margin-top: 10px;
+            transition: color 0.3s;
+        }
+
+        .button a:hover {
+            color: #ffaa00;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Giant logo at the top -->
+    <!-- Logo with smooth animation -->
     <img src="https://lh5.googleusercontent.com/APyhBwXtTzpylXnVtvNR4P2k1qIGTOOtvAu8IS9P-Uh1pR6fdL44Lv0AvOb4xnucf8YkxCwsM-kPjw7P_6bllD4=w16383" alt="Logo" class="logo">
     
-    <h1>options!</h1>
+    <h1>Options!</h1>
     
     <div class="button-grid">
         <div class="button">
-            <a href="https://classroom.awiki.org/worksheets/search.html" target="_blank">
-                Unblocked Web
-            </a>
+            <a href="https://classroom.awiki.org/worksheets/search.html" target="_blank">Unblocked Web</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">
-                Unblocked YouTube
-            </a>
+            <a href="https://classroom.awiki.org/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/worksheets/nowgg.html" target="_blank">
-                games (astroid.gg)
-            </a>
+            <a href="https://classroom.awiki.org/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/worksheets/apps.html" target="_blank">
-                Different apps
-            </a>
+            <a href="https://classroom.awiki.org/worksheets/apps.html" target="_blank">Different Apps</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">
-                Coolmathgames
-            </a>
+            <a href="https://classroom.awiki.org/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/worksheets/emuindex.html" target="_blank">
-                Emulators
-            </a>
+            <a href="https://classroom.awiki.org/worksheets/emuindex.html" target="_blank">Emulators</a>
         </div>
         <div class="button">
-            <a href="https://classroom.awiki.org/worksheets/html.html" target="_blank">
-                HTML/adobe flash games
-            </a>
+            <a href="https://classroom.awiki.org/worksheets/html.html" target="_blank">HTML/Adobe Flash Games</a>
         </div>
         <div class="button">
-            <a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">
-                Pizza Edition (games)
-            </a>
+            <a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a>
         </div>
     </div>
 </body>
