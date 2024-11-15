@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>funschoolwork</title>
     <style>
+        /* Basic styles */
         body {
             background: linear-gradient(45deg, red, blue);
-            background-size: 200% 200%; /* Expands the gradient to create smooth animation */
-            animation: gradientShift 10s ease infinite; /* Adjust duration as needed */
+            background-size: 200% 200%;
+            animation: gradientShift 10s ease infinite;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -56,65 +57,67 @@
             transition: transform 0.3s ease, background 0.3s ease;
         }
 
-        .button:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .button a {
-            text-decoration: none;
-            color: #00aaff;
-            font-size: 18px;
-            font-weight: 600;
+        /* Settings menu styles */
+        #settings-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            width: 300px;
+            z-index: 1000;
             text-align: center;
-            margin-top: 10px;
-            transition: color 0.3s;
         }
 
-        .button a:hover {
-            color: #ffaa00;
+        #settings-menu input,
+        #settings-menu button {
+            margin: 10px 0;
+            padding: 8px;
+            width: 80%;
         }
 
-        /* Animation keyframes */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideIn {
-            0% {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        /* Gradient background animation */
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+        /* Emergency button */
+        #emergency-button {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <!-- Logo and Title -->
     <img src="https://lh5.googleusercontent.com/APyhBwXtTzpylXnVtvNR4P2k1qIGTOOtvAu8IS9P-Uh1pR6fdL44Lv0AvOb4xnucf8YkxCwsM-kPjw7P_6bllD4=w16383" alt="Logo" class="logo">
-    
-    <h1>Options!</h1>
-    
+    <h1 id="main-title">Options!</h1>
+
+    <!-- Settings button -->
+    <button onclick="toggleSettingsMenu()">Settings</button>
+
+    <!-- Settings menu (popup) -->
+    <div id="settings-menu">
+        <h2>Settings</h2>
+        <label for="title-input">Change Website Title:</label>
+        <input type="text" id="title-input" placeholder="Enter new title">
+        <button onclick="changeTitle()">Apply Title</button>
+        <button onclick="showEmergencyButton()">Show Emergency Button</button>
+        <button onclick="toggleSettingsMenu()">Close</button>
+    </div>
+
+    <!-- Emergency button -->
+    <button id="emergency-button" onclick="window.open('https://schoology.org', '_blank')">Emergency Exit</button>
+
+    <!-- Button Grid -->
     <div class="button-grid">
         <div class="button">
             <a href="https://wehaveegg.hbmc.net/worksheets/search.html" target="_blank">Unblocked Web</a>
@@ -141,5 +144,28 @@
             <a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a>
         </div>
     </div>
+
+    <!-- JavaScript for settings functionality -->
+    <script>
+        // Toggle the visibility of the settings menu
+        function toggleSettingsMenu() {
+            const settingsMenu = document.getElementById('settings-menu');
+            settingsMenu.style.display = settingsMenu.style.display === 'none' || settingsMenu.style.display === '' ? 'block' : 'none';
+        }
+
+        // Change the website title (client-side only)
+        function changeTitle() {
+            const titleInput = document.getElementById('title-input').value;
+            if (titleInput) {
+                document.title = titleInput;
+                document.getElementById('main-title').innerText = titleInput;
+            }
+        }
+
+        // Show the emergency button
+        function showEmergencyButton() {
+            document.getElementById('emergency-button').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
