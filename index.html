@@ -5,23 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>funschoolwork</title>
     <style>
-        /* Basic styles */
+        /* Background gradient animation */
         body {
             background: linear-gradient(45deg, red, blue);
             background-size: 200% 200%;
             animation: gradientShift 10s ease infinite;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             align-items: center;
+            justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
             padding: 20px 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
-            overflow-y: auto;
         }
 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Logo and title animations */
         .logo {
             width: 250px;
             margin-bottom: 30px;
@@ -36,6 +42,7 @@
             animation: slideIn 1s ease-in-out;
         }
 
+        /* Button grid and button animations */
         .button-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -55,22 +62,53 @@
             padding: 20px;
             height: 180px;
             transition: transform 0.3s ease, background 0.3s ease;
+            animation: fadeIn 1.5s ease-in-out;
         }
 
-        /* Settings menu styles */
+        .button:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .button a {
+            text-decoration: none;
+            color: #00aaff;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+
+        .button a:hover {
+            color: #ffaa00;
+        }
+
+        /* Keyframes for fade-in animations */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Settings menu styling */
         #settings-menu {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             padding: 20px;
             border-radius: 10px;
             color: white;
             width: 300px;
-            z-index: 1000;
             text-align: center;
+            z-index: 1000;
         }
 
         #settings-menu input,
@@ -80,7 +118,7 @@
             width: 80%;
         }
 
-        /* Emergency button */
+        /* Emergency button styling */
         #emergency-button {
             display: none;
             position: fixed;
@@ -93,6 +131,7 @@
             border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
+            z-index: 1000;
         }
     </style>
 </head>
@@ -117,7 +156,7 @@
     <!-- Emergency button -->
     <button id="emergency-button" onclick="window.open('https://schoology.org', '_blank')">Emergency Exit</button>
 
-    <!-- Button Grid -->
+    <!-- Button grid -->
     <div class="button-grid">
         <div class="button">
             <a href="https://wehaveegg.hbmc.net/worksheets/search.html" target="_blank">Unblocked Web</a>
@@ -145,26 +184,21 @@
         </div>
     </div>
 
-    <!-- JavaScript for settings functionality -->
     <script>
-        // Toggle the visibility of the settings menu
         function toggleSettingsMenu() {
-            const settingsMenu = document.getElementById('settings-menu');
-            settingsMenu.style.display = settingsMenu.style.display === 'none' || settingsMenu.style.display === '' ? 'block' : 'none';
+            const menu = document.getElementById('settings-menu');
+            menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
         }
 
-        // Change the website title (client-side only)
         function changeTitle() {
-            const titleInput = document.getElementById('title-input').value;
-            if (titleInput) {
-                document.title = titleInput;
-                document.getElementById('main-title').innerText = titleInput;
-            }
+            const newTitle = document.getElementById('title-input').value;
+            document.getElementById('main-title').textContent = newTitle || "Options!";
+            document.title = newTitle || "funschoolwork";
         }
 
-        // Show the emergency button
         function showEmergencyButton() {
-            document.getElementById('emergency-button').style.display = 'block';
+            const emergencyButton = document.getElementById('emergency-button');
+            emergencyButton.style.display = 'block';
         }
     </script>
 </body>
