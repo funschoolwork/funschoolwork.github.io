@@ -95,6 +95,25 @@
             100% { transform: translateY(0); opacity: 1; }
         }
 
+        /* Settings button styling */
+        #settings-button {
+            background: linear-gradient(45deg, #ffa500, #ff4500);
+            border: none;
+            border-radius: 20px;
+            padding: 15px 25px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #settings-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
         /* Settings menu styling */
         #settings-menu {
             display: none;
@@ -141,48 +160,51 @@
     <h1 id="main-title">Options!</h1>
 
     <!-- Settings button -->
-    <button onclick="toggleSettingsMenu()">Settings</button>
+    <button id="settings-button" onclick="toggleSettingsMenu(); playClickSound()">Settings</button>
 
     <!-- Settings menu (popup) -->
     <div id="settings-menu">
         <h2>Settings</h2>
         <label for="title-input">Change Website Title:</label>
         <input type="text" id="title-input" placeholder="Enter new title">
-        <button onclick="changeTitle()">Apply Title</button>
-        <button onclick="showEmergencyButton()">Show Emergency Button</button>
-        <button onclick="toggleSettingsMenu()">Close</button>
+        <button onclick="changeTitle(); playClickSound()">Apply Title</button>
+        <button onclick="showEmergencyButton(); playClickSound()">Show Emergency Button</button>
+        <button onclick="toggleSettingsMenu(); playClickSound()">Close</button>
     </div>
 
     <!-- Emergency button -->
-    <button id="emergency-button" onclick="window.open('https://schoology.org', '_blank')">Emergency Exit</button>
+    <button id="emergency-button" onclick="window.open('https://schoology.org', '_blank'); playClickSound()">Emergency Exit</button>
 
     <!-- Button grid -->
     <div class="button-grid">
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/worksheets/search.html" target="_blank">Unblocked Web</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/worksheets/apps.html" target="_blank">Different Apps</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/worksheets/emuindex.html" target="_blank">Emulators</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://wehaveegg.hbmc.net/worksheets/html.html" target="_blank">HTML/Adobe Flash Games</a>
         </div>
-        <div class="button">
+        <div class="button" onclick="playClickSound()">
             <a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a>
         </div>
     </div>
+
+    <!-- Click Sound -->
+    <audio id="click-sound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3" preload="auto"></audio>
 
     <script>
         function toggleSettingsMenu() {
@@ -192,13 +214,17 @@
 
         function changeTitle() {
             const newTitle = document.getElementById('title-input').value;
-            document.getElementById('main-title').textContent = newTitle || "Options!";
-            document.title = newTitle || "funschoolwork";
+            document.getElementById('main-title').textContent = newTitle || 'Options!';
         }
 
         function showEmergencyButton() {
-            const emergencyButton = document.getElementById('emergency-button');
-            emergencyButton.style.display = 'block';
+            document.getElementById('emergency-button').style.display = 'block';
+        }
+
+        function playClickSound() {
+            const clickSound = document.getElementById('click-sound');
+            clickSound.currentTime = 0;
+            clickSound.play();
         }
     </script>
 </body>
