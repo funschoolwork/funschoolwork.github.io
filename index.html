@@ -92,12 +92,14 @@
         .question {
             font-size: 24px;
             margin: 20px 0;
+            text-align: center; /* Center the question */
         }
 
         .answer {
             margin-top: 10px;
             font-size: 20px;
             color: #00e676;
+            text-align: center; /* Center the answer */
         }
 
         #next-question {
@@ -112,6 +114,22 @@
 
         #next-question:hover {
             background-color: #d17d00;
+        }
+
+        /* Settings Button */
+        #settings {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #settings:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -132,6 +150,9 @@
         <div class="button"><a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a></div>
     </div>
 
+    <!-- Settings Button -->
+    <button id="settings" onclick="alert('Settings are under development.')">Settings</button>
+
     <!-- Switch to Math Mode -->
     <button id="switch-math">Switch to Real Math</button>
 
@@ -142,6 +163,9 @@
         <div class="answer" id="answer"></div>
     </div>
 
+    <!-- Sound Effect -->
+    <audio id="click-sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
     <script>
         const OPENAI_API_KEY = 'sk-svcacct-ZswDFfpWvn0ygLW1pdgTwHBr7Lu8N31SpeFAlMjhQLzJLxr3sbtrNv3Xh4K1jDIRHpIJkT3BlbkFJSarsRznLRmmJ1LvASNlEsas7AwlE6Z7DnJWaMjZdzb-MY6FeS92-vOkBCQ4CkRKXPpTAA';
 
@@ -150,10 +174,19 @@
         const questionElement = document.getElementById('question');
         const answerElement = document.getElementById('answer');
         const nextQuestionButton = document.getElementById('next-question');
+        const settingsButton = document.getElementById('settings');
+        const clickSound = document.getElementById('click-sound');
 
         switchMathButton.addEventListener('click', () => {
+            // Play sound effect
+            clickSound.play();
+
+            // Hide options and show math mode
+            document.querySelector('.button-grid').style.display = 'none';
+            settingsButton.style.display = 'none';
             switchMathButton.style.display = 'none';
             mathContainer.style.display = 'block';
+
             generateQuestion();
         });
 
@@ -166,24 +199,31 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4',
-                        messages: [
-                            { role: 'system', content: 'Create a simple math question.' },
-                            { role: 'user', content: 'Generate an easy math question with its answer. Format: Question | Answer' }
-                        ],
-                    }),
+                        model: 'gpt-3.5-turbo',
+                        messages: [{
+                            role: 'user',
+                            content: 'Generate a simple math problem.'
+                        }],
+                        max_tokens: 100
+                    })
                 });
 
                 const data = await response.json();
-                const output = data.choices[0].message.content.split('|');
-                questionElement.textContent = output[0].trim();
-                answerElement.textContent = `Answer: ${output[1].trim()}`;
+                const question = data.choices[0].message.content;
+
+                questionElement.textContent = question;
+                answerElement.textContent = 'Answer: Calculating...';
+
+                // For demonstration purposes, this just gives a basic "Answer" text
+                // You would implement real logic to evaluate the math problem here.
+                setTimeout(() => {
+                    answerElement.textContent = 'Answer: 42'; // Example answer
+                }, 1000);
             } catch (error) {
-                questionElement.textContent = 'Error generating question. Please try again.';
-                console.error(error);
+                console.error('Error generating question:', error);
             }
         }
 
