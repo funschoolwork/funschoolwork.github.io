@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>funschoolwork</title>
+    <title>Fun Schoolwork</title>
     <style>
         /* Background gradient animation */
         body {
@@ -161,8 +161,6 @@
     </div>
 
     <script>
-        const OPENAI_API_KEY = 'sk-svcacct-ZswDFfpWvn0ygLW1pdgTwHBr7Lu8N31SpeFAlMjhQLzJLxr3sbtrNv3Xh4K1jDIRHpIJkT3BlbkFJSarsRznLRmmJ1LvASNlEsas7AwlE6Z7DnJWaMjZdzb-MY6FeS92-vOkBCQ4CkRKXPpTAA';
-
         const switchMathButton = document.getElementById('switch-math');
         const mathContainer = document.getElementById('math-container');
         const questionElement = document.getElementById('question');
@@ -183,39 +181,30 @@
             }, 2000);
         });
 
-        async function generateQuestion() {
+        // Function to generate math problems (addition and sometimes multiplication)
+        function generateQuestion() {
             questionElement.textContent = 'Generating a new question...';
             answerElement.textContent = '';
 
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-4',
-                        messages: [
-                            { role: 'system', content: 'Create a simple math question.' },
-                            { role: 'user', content: 'Generate an easy math question with its answer. Format: Question | Answer' }
-                        ],
-                    }),
-                });
+            // Randomly choose whether to generate an addition or multiplication question
+            const isMultiplication = Math.random() < 0.3;  // 30% chance for multiplication
 
-                const data = await response.json();
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
 
-                if (!data || !data.choices || !data.choices[0].message || !data.choices[0].message.content) {
-                    throw new Error('Invalid API response');
-                }
+            let question = '';
+            let answer = 0;
 
-                const output = data.choices[0].message.content.split('|');
-                questionElement.textContent = output[0].trim();
-                answerElement.textContent = `Answer: ${output[1].trim()}`;
-            } catch (error) {
-                questionElement.textContent = 'Error generating question. Please try again.';
-                console.error(error);
+            if (isMultiplication) {
+                question = `${num1} x ${num2}`;
+                answer = num1 * num2;
+            } else {
+                question = `${num1} + ${num2}`;
+                answer = num1 + num2;
             }
+
+            questionElement.textContent = question;
+            answerElement.textContent = `Answer: ${answer}`;
         }
 
         nextQuestionButton.addEventListener('click', generateQuestion);
