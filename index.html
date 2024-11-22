@@ -136,14 +136,12 @@
     <h1 id="main-title">Options!</h1>
 
     <!-- Button grid -->
-    <div class="button-grid">
+    <div class="button-grid" id="button-options">
         <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/search.html" target="_blank">Unblocked Web</a></div>
         <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a></div>
         <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/apps.html" target="_blank">Different Apps</a></div>
         <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a></div>
         <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/emuindex.html" target="_blank">Emulators</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/html.html" target="_blank">HTML/Adobe Flash Games</a></div>
         <div class="button"><a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a></div>
     </div>
 
@@ -167,10 +165,13 @@
         const answerInput = document.getElementById('answer-input');
         const submitAnswerButton = document.getElementById('submit-answer');
         const settingsButton = document.getElementById('settings');
+        const buttonOptions = document.getElementById('button-options');
 
         let correctAnswer = 0;
 
         switchMathButton.addEventListener('click', () => {
+            // Hide all options and show math mode
+            buttonOptions.style.display = 'none';
             switchMathButton.style.display = 'none';
             mathContainer.style.display = 'block';
             generateQuestion();
