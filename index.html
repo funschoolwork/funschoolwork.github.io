@@ -94,13 +94,13 @@
             margin: 20px 0;
         }
 
-        .answer {
+        #answer-input {
             margin-top: 10px;
             font-size: 20px;
-            color: #00e676;
+            padding: 10px;
         }
 
-        #next-question {
+        #submit-answer {
             padding: 10px 20px;
             font-size: 18px;
             background-color: #ff9800;
@@ -110,7 +110,7 @@
             cursor: pointer;
         }
 
-        #next-question:hover {
+        #submit-answer:hover {
             background-color: #d17d00;
         }
 
@@ -156,17 +156,19 @@
     <!-- Math Mode -->
     <div id="math-container">
         <div class="question" id="question">Loading question...</div>
-        <button id="next-question">Next Question</button>
-        <div class="answer" id="answer"></div>
+        <input type="text" id="answer-input" placeholder="Your answer" />
+        <button id="submit-answer">Submit Answer</button>
     </div>
 
     <script>
         const switchMathButton = document.getElementById('switch-math');
         const mathContainer = document.getElementById('math-container');
         const questionElement = document.getElementById('question');
-        const answerElement = document.getElementById('answer');
-        const nextQuestionButton = document.getElementById('next-question');
+        const answerInput = document.getElementById('answer-input');
+        const submitAnswerButton = document.getElementById('submit-answer');
         const settingsButton = document.getElementById('settings');
+
+        let correctAnswer = 0;
 
         switchMathButton.addEventListener('click', () => {
             switchMathButton.style.display = 'none';
@@ -184,7 +186,6 @@
         // Function to generate math problems (addition and sometimes multiplication)
         function generateQuestion() {
             questionElement.textContent = 'Generating a new question...';
-            answerElement.textContent = '';
 
             // Randomly choose whether to generate an addition or multiplication question
             const isMultiplication = Math.random() < 0.3;  // 30% chance for multiplication
@@ -192,22 +193,30 @@
             const num1 = Math.floor(Math.random() * 10) + 1;
             const num2 = Math.floor(Math.random() * 10) + 1;
 
-            let question = '';
-            let answer = 0;
-
             if (isMultiplication) {
-                question = `${num1} x ${num2}`;
-                answer = num1 * num2;
+                questionElement.textContent = `${num1} x ${num2}`;
+                correctAnswer = num1 * num2;
             } else {
-                question = `${num1} + ${num2}`;
-                answer = num1 + num2;
+                questionElement.textContent = `${num1} + ${num2}`;
+                correctAnswer = num1 + num2;
             }
-
-            questionElement.textContent = question;
-            answerElement.textContent = `Answer: ${answer}`;
         }
 
-        nextQuestionButton.addEventListener('click', generateQuestion);
+        submitAnswerButton.addEventListener('click', () => {
+            const userAnswer = parseInt(answerInput.value);
+
+            if (userAnswer === correctAnswer) {
+                alert("Correct! Generating a new question.");
+                generateQuestion();  // Generate a new question after a correct answer
+                answerInput.value = '';  // Clear the input field
+            } else {
+                alert("Incorrect! Redirecting to Rickroll...");
+                window.open("https://shattereddisk.github.io/rickroll/rickroll.mp4", "_blank"); // Open Rickroll
+                setTimeout(() => {
+                    window.close(); // Close the tab after opening the video
+                }, 2000);
+            }
+        });
     </script>
 </body>
 </html>
