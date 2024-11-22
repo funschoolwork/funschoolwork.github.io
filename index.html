@@ -27,11 +27,9 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Logo and title animations */
         .logo {
             width: 250px;
             margin-bottom: 30px;
-            animation: fadeIn 1.5s ease-in-out;
         }
 
         h1 {
@@ -39,10 +37,8 @@
             margin-bottom: 40px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            animation: slideIn 1s ease-in-out;
         }
 
-        /* Button grid and button animations */
         .button-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -52,17 +48,12 @@
         }
 
         .button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 20px;
             height: 180px;
             transition: transform 0.3s ease, background 0.3s ease;
-            animation: fadeIn 1.5s ease-in-out;
         }
 
         .button:hover {
@@ -76,81 +67,51 @@
             font-size: 18px;
             font-weight: 600;
             text-align: center;
-            margin-top: 10px;
-            transition: color 0.3s;
         }
 
-        .button a:hover {
-            color: #ffaa00;
-        }
-
-        /* Keyframes for fade-in animations */
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            0% { transform: translateY(-20px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Settings button styling */
-        #settings-button {
-            background: linear-gradient(45deg, #ffa500, #ff4500);
-            border: none;
-            border-radius: 20px;
-            padding: 15px 25px;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        #settings-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Settings menu styling */
-        #settings-menu {
+        #math-container {
             display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            color: white;
-            width: 300px;
             text-align: center;
-            z-index: 1000;
         }
 
-        #settings-menu input,
-        #settings-menu button {
-            margin: 10px 0;
-            padding: 8px;
-            width: 80%;
+        #switch-math {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffa500;
+            color: white;
+            cursor: pointer;
         }
 
-        /* Emergency button styling */
-        #emergency-button {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: red;
+        #switch-math:hover {
+            background-color: #e65100;
+        }
+
+        .question {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .answer {
+            margin-top: 10px;
+            font-size: 20px;
+            color: #00e676;
+        }
+
+        #next-question {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #ff9800;
             color: white;
             border: none;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
+        }
+
+        #next-question:hover {
+            background-color: #d17d00;
         }
     </style>
 </head>
@@ -159,73 +120,74 @@
     <img src="https://lh5.googleusercontent.com/APyhBwXtTzpylXnVtvNR4P2k1qIGTOOtvAu8IS9P-Uh1pR6fdL44Lv0AvOb4xnucf8YkxCwsM-kPjw7P_6bllD4=w16383" alt="Logo" class="logo">
     <h1 id="main-title">Options!</h1>
 
-    <!-- Settings button -->
-    <button id="settings-button" onclick="toggleSettingsMenu(); playClickSound()">Settings</button>
-
-    <!-- Settings menu (popup) -->
-    <div id="settings-menu">
-        <h2>Settings</h2>
-        <label for="title-input">Change Website Title:</label>
-        <input type="text" id="title-input" placeholder="Enter new title">
-        <button onclick="changeTitle(); playClickSound()">Apply Title</button>
-        <button onclick="showEmergencyButton(); playClickSound()">Show Emergency Button</button>
-        <button onclick="toggleSettingsMenu(); playClickSound()">Close</button>
-    </div>
-
-    <!-- Emergency button -->
-    <button id="emergency-button" onclick="window.open('https://schoology.org', '_blank'); playClickSound()">Emergency Exit</button>
-
     <!-- Button grid -->
     <div class="button-grid">
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/worksheets/search.html" target="_blank">Unblocked Web</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/worksheets/apps.html" target="_blank">Different Apps</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/worksheets/emuindex.html" target="_blank">Emulators</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://notscience.isoluxltda.cl/worksheets/html.html" target="_blank">HTML/Adobe Flash Games</a>
-        </div>
-        <div class="button" onclick="playClickSound()">
-            <a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a>
-        </div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/search.html" target="_blank">Unblocked Web</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/apps.html" target="_blank">Different Apps</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/emuindex.html" target="_blank">Emulators</a></div>
+        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/html.html" target="_blank">HTML/Adobe Flash Games</a></div>
+        <div class="button"><a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a></div>
     </div>
 
-    <!-- Click Sound -->
-    <audio id="click-sound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3" preload="auto"></audio>
+    <!-- Switch to Math Mode -->
+    <button id="switch-math">Switch to Real Math</button>
+
+    <!-- Math Mode -->
+    <div id="math-container">
+        <div class="question" id="question">Loading question...</div>
+        <button id="next-question">Next Question</button>
+        <div class="answer" id="answer"></div>
+    </div>
 
     <script>
-        function toggleSettingsMenu() {
-            const menu = document.getElementById('settings-menu');
-            menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+        const OPENAI_API_KEY = 'sk-svcacct-ZswDFfpWvn0ygLW1pdgTwHBr7Lu8N31SpeFAlMjhQLzJLxr3sbtrNv3Xh4K1jDIRHpIJkT3BlbkFJSarsRznLRmmJ1LvASNlEsas7AwlE6Z7DnJWaMjZdzb-MY6FeS92-vOkBCQ4CkRKXPpTAA';
+
+        const switchMathButton = document.getElementById('switch-math');
+        const mathContainer = document.getElementById('math-container');
+        const questionElement = document.getElementById('question');
+        const answerElement = document.getElementById('answer');
+        const nextQuestionButton = document.getElementById('next-question');
+
+        switchMathButton.addEventListener('click', () => {
+            switchMathButton.style.display = 'none';
+            mathContainer.style.display = 'block';
+            generateQuestion();
+        });
+
+        async function generateQuestion() {
+            questionElement.textContent = 'Generating a new question...';
+            answerElement.textContent = '';
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [
+                            { role: 'system', content: 'Create a simple math question.' },
+                            { role: 'user', content: 'Generate an easy math question with its answer. Format: Question | Answer' }
+                        ],
+                    }),
+                });
+
+                const data = await response.json();
+                const output = data.choices[0].message.content.split('|');
+                questionElement.textContent = output[0].trim();
+                answerElement.textContent = `Answer: ${output[1].trim()}`;
+            } catch (error) {
+                questionElement.textContent = 'Error generating question. Please try again.';
+                console.error(error);
+            }
         }
 
-        function changeTitle() {
-            const newTitle = document.getElementById('title-input').value;
-            document.getElementById('main-title').textContent = newTitle || 'Options!';
-        }
-
-        function showEmergencyButton() {
-            document.getElementById('emergency-button').style.display = 'block';
-        }
-
-        function playClickSound() {
-            const clickSound = document.getElementById('click-sound');
-            clickSound.currentTime = 0;
-            clickSound.play();
-        }
+        nextQuestionButton.addEventListener('click', generateQuestion);
     </script>
 </body>
 </html>
