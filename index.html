@@ -3,221 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Schoolwork</title>
+    <title>Windows-Like Fun Schoolwork</title>
     <style>
-        /* Background gradient animation */
+        /* General Styling */
         body {
-            background: linear-gradient(45deg, red, blue);
-            background-size: 200% 200%;
-            animation: gradientShift 10s ease infinite;
+            background: url('https://wallpaperaccess.com/full/139759.jpg') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            padding: 20px 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
+            overflow: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Taskbar Styling */
+        .taskbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            height: 40px;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            z-index: 1000;
+            padding: 0 10px;
         }
 
-        .logo {
-            width: 250px;
-            margin-bottom: 30px;
+        .taskbar button {
+            background: none;
+            border: none;
+            color: white;
+            margin: 0 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .taskbar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
         }
 
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            grid-gap: 20px;
-            width: 90%;
-            max-width: 800px;
+        /* Fake Browser Styling */
+        .fake-browser {
+            width: 80%;
+            height: 70%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin: 50px 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: absolute;
+            top: 100px;
+            left: 10%;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: none; /* Ensure it's hidden initially */
         }
 
-        .button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 20px;
-            height: 180px;
-            transition: transform 0.3s ease, background 0.3s ease;
+        .fake-browser.minimized {
+            height: 40px;
+            width: 80%;
+            top: calc(100% - 50px);
+            left: 10%;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .button:hover {
-            transform: translateY(-5px);
+        .browser-header {
+            height: 40px;
+            background: #f1f1f1;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .browser-header .buttons {
+            display: flex;
+            margin-right: auto;
+        }
+
+        .browser-header .button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .browser-header .button.close {
+            background: #ff5f57;
+        }
+
+        .browser-header .button.minimize {
+            background: #ffbd2e;
+        }
+
+        .browser-header .button.maximize {
+            background: #28c940;
+        }
+
+        .address-bar {
+            flex-grow: 1;
+            margin-left: 10px;
+            font-size: 14px;
+            padding: 5px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+            border: none;
+            color: #555;
+        }
+
+        .iframe-container {
+            flex-grow: 1;
+            border: none;
+            background-color: #fff; /* Ensures the iframe shows up with a white background */
+            overflow: hidden;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Windows Menu Styling */
+        .windows-menu {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            width: 200px;
+        }
+
+        .windows-menu button {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .windows-menu button:hover {
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .button a {
-            text-decoration: none;
-            color: #00aaff;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        #math-container {
-            display: none;
-            text-align: center;
-        }
-
-        #switch-math {
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #ffa500;
-            color: white;
+        /* Pop-Out Effect */
+        .windows-button {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             cursor: pointer;
+            background-color: #2f70cc;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: transform 0.3s ease;
         }
 
-        #switch-math:hover {
-            background-color: #e65100;
+        .windows-button:hover {
+            transform: scale(1.1);
         }
 
-        .question {
-            font-size: 24px;
-            margin: 20px 0;
+        /* Shake animation for the Google Chrome button */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
         }
 
-        #answer-input {
+        .windows-button.shake {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        /* Text below the button */
+        .button-text {
+            color: white;
+            font-size: 14px;
             margin-top: 10px;
-            font-size: 20px;
-            padding: 10px;
+            text-align: center;
         }
 
-        #submit-answer {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #submit-answer:hover {
-            background-color: #d17d00;
-        }
-
-        #settings {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #settings:hover {
-            background-color: #e60000;
-        }
     </style>
 </head>
 <body>
-    <!-- Logo and Title -->
-    <img src="https://lh5.googleusercontent.com/APyhBwXtTzpylXnVtvNR4P2k1qIGTOOtvAu8IS9P-Uh1pR6fdL44Lv0AvOb4xnucf8YkxCwsM-kPjw7P_6bllD4=w16383" alt="Logo" class="logo">
-    <h1 id="main-title">Options!</h1>
 
-    <!-- Button grid -->
-    <div class="button-grid" id="button-options">
-        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/search.html" target="_blank">Unblocked Web</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-" target="_blank">Unblocked YouTube</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/nowgg.html" target="_blank">Games (astroid.gg)</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-" target="_blank">Coolmathgames</a></div>
-        <div class="button"><a href="https://notscience.isoluxltda.cl/worksheets/emuindex.html" target="_blank">Emulators</a></div>
-        <div class="button"><a href="https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on" target="_blank">Pizza Edition (Games)</a></div>
+    <!-- Windows Pop-Out Button -->
+    <div class="windows-button shake" onclick="toggleBrowser()">Google Chrome</div>
+    <div class="button-text">Open Unblock Browser</div>
+
+    <!-- Fake Browser Window -->
+    <div class="fake-browser" id="browser-window">
+        <div class="browser-header">
+            <div class="buttons">
+                <div class="button close" onclick="closeBrowser()"></div>
+                <div class="button minimize" onclick="minimizeBrowser()"></div>
+                <div class="button maximize" onclick="maximizeBrowser()"></div>
+            </div>
+            <input class="address-bar" type="text" value="https://notscience.isoluxltda.cl/worksheets/search.html" readonly>
+        </div>
+        <div class="iframe-container">
+            <iframe id="embedded-content" src="https://notscience.isoluxltda.cl/worksheets/search.html"></iframe>
+        </div>
     </div>
 
-    <!-- Switch to Math Mode -->
-    <button id="switch-math">Switch to Real Math</button>
-
-    <!-- Settings -->
-    <button id="settings">Settings</button>
-
-    <!-- Math Mode -->
-    <div id="math-container">
-        <div class="question" id="question">Loading question...</div>
-        <input type="text" id="answer-input" placeholder="Your answer" />
-        <button id="submit-answer">Submit Answer</button>
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button onclick="toggleWindowsMenu()">Windows</button>
+        <div class="windows-menu" id="windows-menu">
+            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/search.html')">Unblocked Web</button>
+            <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmm-')">Unblocked YouTube</button>
+            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/nowgg.html')">Games</button>
+            <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-')">Coolmath</button>
+            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/emuindex.html')">Emulators</button>
+            <button onclick="changeContent('https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on')">Pizza Edition</button>
+        </div>
     </div>
 
     <script>
-        const switchMathButton = document.getElementById('switch-math');
-        const mathContainer = document.getElementById('math-container');
-        const questionElement = document.getElementById('question');
-        const answerInput = document.getElementById('answer-input');
-        const submitAnswerButton = document.getElementById('submit-answer');
-        const settingsButton = document.getElementById('settings');
-        const buttonOptions = document.getElementById('button-options');
+        const browserWindow = document.getElementById('browser-window');
 
-        let correctAnswer = 0;
-
-        switchMathButton.addEventListener('click', () => {
-            // Hide all options and show math mode
-            buttonOptions.style.display = 'none';
-            switchMathButton.style.display = 'none';
-            mathContainer.style.display = 'block';
-            generateQuestion();
-        });
-
-        settingsButton.addEventListener('click', () => {
-            settingsButton.textContent = "Closing tab...";
-            setTimeout(() => {
-                window.close(); // Closes the tab after 2 seconds
-            }, 2000);
-        });
-
-        // Function to generate math problems (addition and sometimes multiplication)
-        function generateQuestion() {
-            questionElement.textContent = 'Generating a new question...';
-
-            // Randomly choose whether to generate an addition or multiplication question
-            const isMultiplication = Math.random() < 0.3;  // 30% chance for multiplication
-
-            const num1 = Math.floor(Math.random() * 10) + 1;
-            const num2 = Math.floor(Math.random() * 10) + 1;
-
-            if (isMultiplication) {
-                questionElement.textContent = `${num1} x ${num2}`;
-                correctAnswer = num1 * num2;
+        // Toggle browser visibility (open or close)
+        function toggleBrowser() {
+            if (browserWindow.style.display === 'none') {
+                browserWindow.style.display = 'flex';
             } else {
-                questionElement.textContent = `${num1} + ${num2}`;
-                correctAnswer = num1 + num2;
+                browserWindow.style.display = 'none';
             }
         }
 
-        submitAnswerButton.addEventListener('click', () => {
-            const userAnswer = parseInt(answerInput.value);
+        // Change iframe content based on button clicks
+        function changeContent(url) {
+            const iframe = document.getElementById('embedded-content');
+            iframe.src = url;
+            const addressBar = document.querySelector('.address-bar');
+            addressBar.value = url;
+        }
 
-            if (userAnswer === correctAnswer) {
-                alert("Correct! Generating a new question.");
-                generateQuestion();  // Generate a new question after a correct answer
-                answerInput.value = '';  // Clear the input field
-            } else {
-                alert("Incorrect! Redirecting to Rickroll...");
-                window.open("https://shattereddisk.github.io/rickroll/rickroll.mp4", "_blank"); // Open Rickroll
-                setTimeout(() => {
-                    window.close(); // Close the tab after opening the video
-                }, 2000);
-            }
-        });
+        // Toggle the Windows menu visibility
+        function toggleWindowsMenu() {
+            const menu = document.getElementById('windows-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Minimize the browser window
+        function minimizeBrowser() {
+            browserWindow.classList.add('minimized');
+        }
+
+        // Maximize the browser window
+        function maximizeBrowser() {
+            browserWindow.classList.remove('minimized');
+        }
+
+        // Close the browser window
+        function closeBrowser() {
+            browserWindow.style.display = 'none';
+        }
     </script>
+
 </body>
 </html>
