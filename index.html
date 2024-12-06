@@ -7,8 +7,7 @@
     <style>
         /* General Styling */
         body {
-            background: url('https://wallpaperaccess.com/full/139759.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,6 +17,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
             overflow: hidden;
+        }
+
+        /* Title */
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
         }
 
         /* Taskbar Styling */
@@ -50,28 +57,18 @@
 
         /* Fake Browser Styling */
         .fake-browser {
-            width: 80%;
-            height: 70%;
+            width: 100vw; /* Full width of the viewport */
+            height: 100vh; /* Full height of the viewport */
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            margin: 50px 0;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: absolute;
-            top: 100px;
-            left: 10%;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            display: none; /* Ensure it's hidden initially */
-        }
-
-        .fake-browser.minimized {
-            height: 40px;
-            width: 80%;
-            top: calc(100% - 50px);
-            left: 10%;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            top: 0;
+            left: 0;
+            z-index: 500;
         }
 
         .browser-header {
@@ -81,56 +78,60 @@
             align-items: center;
             padding: 0 10px;
             border-bottom: 1px solid #ddd;
-        }
-
-        .browser-header .buttons {
-            display: flex;
-            margin-right: auto;
-        }
-
-        .browser-header .button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .browser-header .button.close {
-            background: #ff5f57;
-        }
-
-        .browser-header .button.minimize {
-            background: #ffbd2e;
-        }
-
-        .browser-header .button.maximize {
-            background: #28c940;
-        }
-
-        .address-bar {
-            flex-grow: 1;
-            margin-left: 10px;
-            font-size: 14px;
-            padding: 5px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            outline: none;
-            border: none;
-            color: #555;
+            visibility: hidden; /* Hide the header */
         }
 
         .iframe-container {
             flex-grow: 1;
-            border: none;
-            background-color: #fff; /* Ensures the iframe shows up with a white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
         .iframe-container iframe {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             border: none;
+        }
+
+        /* Flip Animation for Links */
+        @keyframes flip {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+
+        .link-button {
+            font-size: 18px;
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .link-button:active {
+            transform: rotateY(180deg);
+        }
+
+        /* Emergency Button */
+        .emergency-button {
+            position: fixed;
+            top: 10px;      /* Move to the top */
+            left: 10px;     /* Move to the left */
+            background-color: red;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            z-index: 10000;
+        }
+
+        .emergency-button:hover {
+            transform: scale(1.1);
         }
 
         /* Windows Menu Styling */
@@ -163,63 +164,50 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Pop-Out Effect */
-        .windows-button {
+        /* Close Button and Close Animation */
+        .close-button {
             position: absolute;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px;
+            background-color: red;
+            padding: 10px;
+            color: white;
             cursor: pointer;
-            background-color: #2f70cc;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            transition: transform 0.3s ease;
+            border-radius: 50%;
+            font-size: 18px;
         }
 
-        .windows-button:hover {
+        .close-button:hover {
             transform: scale(1.1);
-        }
-
-        /* Shake animation for the Google Chrome button */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .windows-button.shake {
-            animation: shake 0.5s ease-in-out infinite;
-        }
-
-        /* Text below the button */
-        .button-text {
-            color: white;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
         }
 
     </style>
 </head>
 <body>
 
-    <!-- Windows Pop-Out Button -->
-    <div class="windows-button shake" onclick="toggleBrowser()">Google Chrome</div>
-    <div class="button-text">Open Unblock Browser</div>
+    <!-- Title -->
+    <div class="title">Funschool Work</div>
 
-    <!-- Fake Browser Window -->
-    <div class="fake-browser" id="browser-window">
+    <!-- Emergency Button -->
+    <div class="emergency-button" onclick="goToEmergency()">Emergency</div>
+
+    <!-- Windows Pop-Out Button -->
+    <div class="link-button" onclick="toggleBrowser()">Open Unblock Browser</div>
+
+    <!-- Windows Menu -->
+    <div class="windows-menu" id="windows-menu">
+        <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/search.html')">Unblocked Web</button>
+        <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmm-')">Unblocked YouTube</button>
+        <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/nowgg.html')">Games</button>
+        <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-')">Coolmath</button>
+        <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/emuindex.html')">Emulators</button>
+        <button onclick="changeContent('https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on')">Pizza Edition</button>
+    </div>
+
+    <!-- Fake Browser Window (Initially Visible and Fullscreen) -->
+    <div class="fake-browser" id="browser-window" style="display: flex;">
         <div class="browser-header">
-            <div class="buttons">
-                <div class="button close" onclick="closeBrowser()"></div>
-                <div class="button minimize" onclick="minimizeBrowser()"></div>
-                <div class="button maximize" onclick="maximizeBrowser()"></div>
-            </div>
-            <input class="address-bar" type="text" value="https://notscience.isoluxltda.cl/worksheets/search.html" readonly>
+            <div class="close-button" onclick="closeBrowser()">X</div>
         </div>
         <div class="iframe-container">
             <iframe id="embedded-content" src="https://notscience.isoluxltda.cl/worksheets/search.html"></iframe>
@@ -228,22 +216,13 @@
 
     <!-- Taskbar -->
     <div class="taskbar">
-        <button onclick="toggleWindowsMenu()">Windows</button>
-        <div class="windows-menu" id="windows-menu">
-            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/search.html')">Unblocked Web</button>
-            <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmm-')">Unblocked YouTube</button>
-            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/nowgg.html')">Games</button>
-            <button onclick="changeContent('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-')">Coolmath</button>
-            <button onclick="changeContent('https://notscience.isoluxltda.cl/worksheets/emuindex.html')">Emulators</button>
-            <button onclick="changeContent('https://sites.google.com/view/funschoolwork/pizzaey78472edit8w39on')">Pizza Edition</button>
-        </div>
+        <button onclick="toggleWindowsMenu()">Options</button>  <!-- Updated to "Options" -->
     </div>
 
     <script>
-        const browserWindow = document.getElementById('browser-window');
-
         // Toggle browser visibility (open or close)
         function toggleBrowser() {
+            const browserWindow = document.getElementById('browser-window');
             if (browserWindow.style.display === 'none') {
                 browserWindow.style.display = 'flex';
             } else {
@@ -255,8 +234,6 @@
         function changeContent(url) {
             const iframe = document.getElementById('embedded-content');
             iframe.src = url;
-            const addressBar = document.querySelector('.address-bar');
-            addressBar.value = url;
         }
 
         // Toggle the Windows menu visibility
@@ -265,21 +242,16 @@
             menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Minimize the browser window
-        function minimizeBrowser() {
-            browserWindow.classList.add('minimized');
+        // Go to Google from Emergency Button
+        function goToEmergency() {
+            window.location.href = "https://www.google.com";
         }
 
-        // Maximize the browser window
-        function maximizeBrowser() {
-            browserWindow.classList.remove('minimized');
-        }
-
-        // Close the browser window
+        // Close the browser
         function closeBrowser() {
+            const browserWindow = document.getElementById('browser-window');
             browserWindow.style.display = 'none';
         }
     </script>
-
 </body>
 </html>
