@@ -131,7 +131,7 @@
     <!-- Desktop Background -->
     <div class="desktop">
         <div class="app-icon" onclick="openLink('https://notscience.isoluxltda.cl/worksheets/search.html')">Unblocked Web</div>
-        <div class="app-icon" onclick="openLink('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmm-')">Unblocked YouTube</div>
+        <div class="app-icon" onclick="showInstruction()">Go to Unblocked Web and Type YouTube.com</div>
         <div class="app-icon" onclick="openLink('https://notscience.isoluxltda.cl/worksheets/nowgg.html')">Games</div>
         <div class="app-icon" onclick="openLink('https://notscience.isoluxltda.cl/service/hvtrs8%2F-wuw%2Ccmonmctjgcmgs%2Ccmm-')">Coolmath</div>
         <div class="app-icon" onclick="openLink('https://notscience.isoluxltda.cl/worksheets/emuindex.html')">Emulators</div>
@@ -153,20 +153,21 @@
         function openLink(url) {
             const loadingScreen = document.getElementById('loading-screen');
 
-            // Pre-create a new tab to avoid being blocked
-            const newTab = window.open('', '_blank');
-
             // Show the loading screen
             loadingScreen.classList.add('active');
 
-            // Wait 3 seconds before navigating to the URL
+            // Wait 3 seconds before opening the URL
             setTimeout(() => {
                 loadingScreen.classList.remove('active');
-                if (newTab) {
-                    newTab.location.href = url;
-                }
+                window.open(url, '_blank');
             }, 3000);
+        }
+
+        // Function to display instructions for unblocked YouTube
+        function showInstruction() {
+            alert("To access YouTube, go to Unblocked Web and type YouTube.com in the search bar.");
         }
     </script>
 </body>
 </html>
+
