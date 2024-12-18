@@ -151,17 +151,25 @@
     <script>
         // Function to open links with a loading animation
         function openLink(url) {
-            const loadingScreen = document.getElementById('loading-screen');
+    const loadingScreen = document.getElementById('loading-screen');
 
-            // Show the loading screen
-            loadingScreen.classList.add('active');
+    // Open the URL in a new tab immediately and save the reference
+    const newTab = window.open('', '_blank');
 
-            // Wait 3 seconds before opening the URL
-            setTimeout(() => {
-                loadingScreen.classList.remove('active');
-                window.open(url, '_blank');
-            }, 3000);
+    // Show the loading screen
+    loadingScreen.classList.add('active');
+
+    // Update the new tab's location after the delay
+    setTimeout(() => {
+        loadingScreen.classList.remove('active');
+        if (newTab) {
+            newTab.location.href = url;
+        } else {
+            alert("Popup blocked! Please allow popups for this site.");
         }
+    }, 3000);
+}
+
 
         // Function to display instructions for unblocked YouTube
         function showInstruction() {
