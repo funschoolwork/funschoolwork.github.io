@@ -39,29 +39,33 @@
             height: 100vh;
             background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
-            overflow-y: auto;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
+            overflow: hidden;
         }
 
         .fullscreen-content iframe {
             width: 100%;
-            height: 90%;
+            height: 100%;  /* Ensure iframe fills the entire screen */
             border: none;
-            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 0;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.6);
         }
 
         .fullscreen-content .close-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 10px;
+            padding: 15px 30px;  /* Make the button bigger */
+            font-size: 18px;  /* Make the font bigger */
+            position: absolute;
+            top: 20px;
+            right: 20px;
             color: white;
             background: rgba(255, 255, 255, 0.3);
             border: none;
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s ease;
+            z-index: 2001;  /* Ensure the button is on top of the iframe */
         }
 
         .fullscreen-content .close-button:hover {
@@ -170,7 +174,13 @@
             }
 
             .fullscreen-content iframe {
-                height: 80%;
+                height: 100%; /* Ensure iframe fits the screen */
+            }
+
+            .fullscreen-content .close-button {
+                padding: 15px 30px;  /* Larger button on mobile */
+                font-size: 18px;      /* Larger text on mobile */
+                margin-top: 20px;
             }
         }
     </style>
@@ -207,19 +217,20 @@
     <script>
         // Function to open content in full screen
         function openFullscreen(url) {
-            const fullscreenContent = document.getElementById('fullscreen-content');
-            const iframe = document.getElementById('fullscreen-iframe');
+            var iframe = document.getElementById('fullscreen-iframe');
+            var fullscreenContent = document.getElementById('fullscreen-content');
             iframe.src = url;
             fullscreenContent.style.display = 'flex';
         }
 
-        // Function to close full screen
+        // Function to close full-screen content
         function closeFullscreen() {
-            const fullscreenContent = document.getElementById('fullscreen-content');
-            const iframe = document.getElementById('fullscreen-iframe');
-            fullscreenContent.style.display = 'none';
+            var fullscreenContent = document.getElementById('fullscreen-content');
+            var iframe = document.getElementById('fullscreen-iframe');
             iframe.src = '';
+            fullscreenContent.style.display = 'none';
         }
     </script>
+
 </body>
 </html>
