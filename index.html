@@ -14,6 +14,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent overflow from causing issues on mobile */
         }
 
         /* Title */
@@ -35,8 +37,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             overflow: hidden;
@@ -163,6 +165,7 @@
             background: #ff6f6f;
         }
 
+        /* Adjustments for mobile */
         @media (max-width: 600px) {
             .title {
                 font-size: 20px;
@@ -174,7 +177,7 @@
             }
 
             .fullscreen-content iframe {
-                height: 100%; /* Ensure iframe fits the screen */
+                height: 100vh; /* Ensure iframe takes the full height */
             }
 
             .fullscreen-content .close-button {
@@ -208,29 +211,22 @@
     <!-- Game Button with Image and Shaking Animation -->
     <button class="game-button" onclick="openFullscreen('https://math.hotunix.com/worksheets/html.html')">
         <img src="https://c4.wallpaperflare.com/wallpaper/429/12/61/game-icons-icons-program-wallpaper-preview.jpg" alt="Games">
-        So many fun games better than pizza edition has every 2 minute football games too
+        So many fun games better than pizza edition and has all 2minutefootball games!
     </button>
 
     <!-- Floating Button -->
-    <button class="floating-button" onclick="window.location.href='https://www.google.com'">Teacher is Near</button>
+    <button class="floating-button" onclick="window.location.href='https://www.google.com'">Teacher Is Near</button>
 
     <script>
-        // Function to open content in full screen
         function openFullscreen(url) {
-            var iframe = document.getElementById('fullscreen-iframe');
-            var fullscreenContent = document.getElementById('fullscreen-content');
+            const iframe = document.getElementById("fullscreen-iframe");
             iframe.src = url;
-            fullscreenContent.style.display = 'flex';
+            document.getElementById("fullscreen-content").style.display = "flex";
         }
 
-        // Function to close full-screen content
         function closeFullscreen() {
-            var fullscreenContent = document.getElementById('fullscreen-content');
-            var iframe = document.getElementById('fullscreen-iframe');
-            iframe.src = '';
-            fullscreenContent.style.display = 'none';
+            document.getElementById("fullscreen-content").style.display = "none";
         }
     </script>
-
 </body>
 </html>
