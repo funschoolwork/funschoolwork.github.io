@@ -7,7 +7,7 @@
     <style>
         /* General Styling */
         body {
-            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            background: linear-gradient(to right, #6a11cb, #2575fc);
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: white;
@@ -15,7 +15,69 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
-            overflow: hidden; /* Prevent overflow from causing issues on mobile */
+            overflow: hidden;
+        }
+
+        /* Warning Modal */
+        .warning-modal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .warning-modal-content {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .warning-modal h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ff4f4f;
+        }
+
+        .warning-modal p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        .warning-modal button {
+            background: #ff4f4f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .warning-modal button:hover {
+            background: #ff6f6f;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* Title */
@@ -26,6 +88,12 @@
             text-align: center;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         /* Full-Screen Content Styling */
@@ -46,7 +114,7 @@
 
         .fullscreen-content iframe {
             width: 100%;
-            height: 100%;  /* Ensure iframe fills the entire screen */
+            height: 100%;
             border: none;
             position: absolute;
             top: 0;
@@ -56,8 +124,8 @@
         }
 
         .fullscreen-content .close-button {
-            padding: 15px 30px;  /* Make the button bigger */
-            font-size: 18px;  /* Make the font bigger */
+            padding: 15px 30px;
+            font-size: 18px;
             position: absolute;
             top: 20px;
             right: 20px;
@@ -67,7 +135,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s ease;
-            z-index: 2001;  /* Ensure the button is on top of the iframe */
+            z-index: 2001;
         }
 
         .fullscreen-content .close-button:hover {
@@ -84,7 +152,7 @@
         }
 
         .hamburger-menu button {
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
             border: none;
             color: white;
             padding: 15px 20px;
@@ -99,16 +167,7 @@
         .hamburger-menu button:hover {
             transform: scale(1.1);
             box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.6);
-            background: linear-gradient(135deg, #2575fc, #6a11cb);
-        }
-
-        /* Shaking Button Animation */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(10px); }
+            background: linear-gradient(135deg, #feb47b, #ff7e5f);
         }
 
         /* Game Button Styling */
@@ -117,7 +176,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
             border: none;
             color: white;
             padding: 15px 20px;
@@ -139,7 +198,15 @@
         .game-button:hover {
             transform: scale(1.1);
             box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.6);
-            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            background: linear-gradient(135deg, #feb47b, #ff7e5f);
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(10px); }
         }
 
         /* Floating Button */
@@ -177,18 +244,28 @@
             }
 
             .fullscreen-content iframe {
-                height: 100vh; /* Ensure iframe takes the full height */
+                height: 100vh;
             }
 
             .fullscreen-content .close-button {
-                padding: 15px 30px;  /* Larger button on mobile */
-                font-size: 18px;      /* Larger text on mobile */
+                padding: 15px 30px;
+                font-size: 18px;
                 margin-top: 20px;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- Warning Modal -->
+    <div class="warning-modal" id="warning-modal">
+        <div class="warning-modal-content">
+            <h2>⚠️ Alpha Warning</h2>
+            <p>This page is in alpha and might not work properly at times. Use at your own risk!</p>
+            <p>Made by <strong>EvanBlokEnder</strong></p>
+            <button onclick="closeWarningModal()">I Understand</button>
+        </div>
+    </div>
 
     <!-- Title -->
     <div class="title">funschoolwork.github.io/status=fixed!</div>
@@ -202,8 +279,7 @@
     <!-- Hamburger Menu -->
     <div class="hamburger-menu">
         <button onclick="openFullscreen('https://mathprofession.buzz/!')">Unblocked Web</button>
-        <button onclick="openFullscreen('https://mathprofession.buzz/a')">Unblocked apps</button>
-        
+        <button onclick="openFullscreen('https://mathprofession.buzz/a')">Unblocked Apps</button>
     </div>
 
     <!-- Game Button with Image and Shaking Animation -->
@@ -213,9 +289,16 @@
     </button>
 
     <!-- Floating Button -->
-    <button class="floating-button" onclick="window.location.href='https://www.google.com'">go to google.com</button>
+    <button class="floating-button" onclick="window.location.href='https://www.google.com'">Go to Google.com</button>
 
     <script>
+        // Show warning modal on page load
+        document.getElementById("warning-modal").style.display = "flex";
+
+        function closeWarningModal() {
+            document.getElementById("warning-modal").style.display = "none";
+        }
+
         function openFullscreen(url) {
             const iframe = document.getElementById("fullscreen-iframe");
             iframe.src = url;
