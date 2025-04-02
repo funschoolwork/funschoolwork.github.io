@@ -268,6 +268,94 @@
             background: #ff6f6f;
         }
 
+        /* Math Game Styles */
+        .math-game {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .math-game-container {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .math-game h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4fafff;
+        }
+
+        .math-problem {
+            font-size: 36px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .math-answer {
+            font-size: 18px;
+            padding: 10px;
+            width: 100px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .math-feedback {
+            font-size: 18px;
+            margin-bottom: 20px;
+            min-height: 27px;
+        }
+
+        .math-score {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #feb47b;
+        }
+
+        .math-level {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #4fafff;
+        }
+
+        .math-game button {
+            background: #4fafff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .math-game button:hover {
+            background: #6fc0ff;
+        }
+
+        .correct {
+            color: #4caf50;
+        }
+
+        .incorrect {
+            color: #ff4f4f;
+        }
+
         /* Adjustments for mobile */
         @media (max-width: 600px) {
             .title {
@@ -288,6 +376,10 @@
                 font-size: 18px;
                 margin-top: 20px;
             }
+            
+            .math-problem {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
@@ -304,7 +396,7 @@
         <div class="warning-modal-content">
             <h2>⚠️ æææææææææææææ</h2>
             <p>æææææææææææææ</p>
-            <p>Made by <strong>EvanBlokEnder aka freakistino</strong></p>
+            <p>Made by <strong>EvanBlokEnder aka freaky</strong></p>
             <button onclick="closeWarningModal()">I Understand</button>
         </div>
     </div>
@@ -331,7 +423,20 @@
     </button>
 
     <!-- Floating Button -->
-    <button class="floating-button" onclick="window.location.href='https://www.google.com'">Go to Google.com</button>
+    <button class="floating-button" onclick="startMathGame()">Math Challenge!</button>
+
+    <!-- Math Game -->
+    <div class="math-game" id="math-game">
+        <div class="math-game-container">
+            <h2>Math Challenge!</h2>
+            <div class="math-level" id="math-level">Level: 1 (Addition)</div>
+            <div class="math-score" id="math-score">Score: 0</div>
+            <div class="math-problem" id="math-problem">5 + 3 = ?</div>
+            <input type="number" class="math-answer" id="math-answer" placeholder="Answer">
+            <div class="math-feedback" id="math-feedback"></div>
+            <button onclick="checkMathAnswer()">Submit</button>
+        </div>
+    </div>
 
     <script>
         // Show image overlay on page load
@@ -360,6 +465,119 @@
         function closeFullscreen() {
             document.getElementById("fullscreen-content").style.display = "none";
         }
+
+        // Math Game Variables
+        let score = 0;
+        let level = 1;
+        let currentProblem = {};
+        let maxNumber = 10;
+        let operation = '+';
+
+        // Math Game Functions
+        function startMathGame() {
+            // Close any open embeds
+            closeFullscreen();
+            
+            // Reset game state
+            score = 0;
+            level = 1;
+            maxNumber = 10;
+            operation = '+';
+            
+            // Show math game
+            document.getElementById('math-game').style.display = 'flex';
+            
+            // Generate first problem
+            generateMathProblem();
+            
+            // Focus on answer input
+            document.getElementById('math-answer').focus();
+        }
+
+        function generateMathProblem() {
+            const num1 = Math.floor(Math.random() * maxNumber) + 1;
+            const num2 = Math.floor(Math.random() * maxNumber) + 1;
+            
+            // Determine operation based on level
+            if (level <= 3) {
+                operation = '+';
+            } else if (level <= 6) {
+                operation = '-';
+            } else {
+                // Alternate between + and - for higher levels
+                operation = Math.random() > 0.5 ? '+' : '-';
+            }
+            
+            // For subtraction, ensure we don't get negative numbers
+            if (operation === '-') {
+                currentProblem.num1 = Math.max(num1, num2);
+                currentProblem.num2 = Math.min(num1, num2);
+            } else {
+                currentProblem.num1 = num1;
+                currentProblem.num2 = num2;
+            }
+            
+            currentProblem.operation = operation;
+            
+            if (operation === '+') {
+                currentProblem.answer = currentProblem.num1 + currentProblem.num2;
+            } else {
+                currentProblem.answer = currentProblem.num1 - currentProblem.num2;
+            }
+            
+            document.getElementById('math-problem').textContent = 
+                `${currentProblem.num1} ${currentProblem.operation} ${currentProblem.num2} = ?`;
+                
+            document.getElementById('math-level').textContent = `Level: ${level} (${operation === '+' ? 'Addition' : 'Subtraction'})`;
+            document.getElementById('math-score').textContent = `Score: ${score}`;
+            document.getElementById('math-answer').value = '';
+            document.getElementById('math-feedback').textContent = '';
+            document.getElementById('math-feedback').className = 'math-feedback';
+        }
+
+        function checkMathAnswer() {
+            const userAnswer = parseInt(document.getElementById('math-answer').value);
+            const feedbackElement = document.getElementById('math-feedback');
+            
+            if (isNaN(userAnswer)) {
+                feedbackElement.textContent = 'Please enter a number!';
+                feedbackElement.className = 'math-feedback incorrect';
+                return;
+            }
+            
+            if (userAnswer === currentProblem.answer) {
+                score += level; // Higher levels give more points
+                feedbackElement.textContent = 'Correct! 🎉';
+                feedbackElement.className = 'math-feedback correct';
+                
+                // Level up every 3 correct answers
+                if (score >= level * 3) {
+                    level++;
+                    maxNumber += 5; // Increase difficulty
+                }
+            } else {
+                feedbackElement.textContent = `Incorrect! The answer was ${currentProblem.answer}`;
+                feedbackElement.className = 'math-feedback incorrect';
+                
+                // Don't decrease level below 1
+                if (level > 1 && score > 0) {
+                    score = Math.max(0, score - 1);
+                }
+            }
+            
+            // Update score display
+            document.getElementById('math-score').textContent = `Score: ${score}`;
+            
+            // Generate new problem after a short delay
+            setTimeout(generateMathProblem, 1500);
+        }
+
+        // Allow pressing Enter to submit answer
+        document.getElementById('math-answer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkMathAnswer();
+            }
+        });
     </script>
 </body>
 </html>
