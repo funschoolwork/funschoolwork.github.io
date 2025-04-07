@@ -18,45 +18,9 @@
             overflow: hidden;
         }
 
-        /* Image Overlay */
-        #image-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 4000;
-            opacity: 1;
-            transition: opacity 1s ease;
-        }
-
-        #image-overlay img {
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        #image-overlay h1 {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Hide the overlay after fade-out */
-        #image-overlay.hidden {
-            opacity: 0;
-            pointer-events: none; /* Disable interaction after fade-out */
-        }
-
         /* Warning Modal */
         .warning-modal {
-            display: none; /* Initially hidden */
+            display: flex; /* Changed from none to flex to show immediately */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -384,14 +348,7 @@
     </style>
 </head>
 <body>
-
-    <!-- Image Overlay -->
-    <div id="image-overlay">
-        <h1>WE ARE SO BACK</h1>
-        <img src="IMG_0121 2.png" alt="Bypasser Image">
-    </div>
-
-    <!-- Warning Modal -->
+    <!-- Warning Modal (now shown immediately) -->
     <div class="warning-modal" id="warning-modal">
         <div class="warning-modal-content">
             <h2>⚠️ Alpha Warning</h2>
@@ -412,12 +369,12 @@
 
     <!-- Hamburger Menu -->
     <div class="hamburger-menu">
-        <button onclick="openFullscreen('https://funschoolwork.hbmc.net/worksheets/search.html')">Unblocked Web</button>
-        <button onclick="openFullscreen('https://funschoolwork.hbmc.net/worksheets/apps.html')">Unblocked Apps</button>
+        <button onclick="openFullscreen('https://schooltripideas.home.kg/worksheets/search.html')">Unblocked Web</button>
+        <button onclick="openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html')">Unblocked Apps</button>
     </div>
 
     <!-- Game Button with Image and Shaking Animation -->
-    <button class="game-button" onclick="openFullscreen('https://funschoolwork.hbmc.net/worksheets/html.html')">
+    <button class="game-button" onclick="openFullscreen('https://schooltripideas.home.kg/worksheets/html.html')">
         <img src="https://c4.wallpaperflare.com/wallpaper/429/12/61/game-icons-icons-program-wallpaper-preview.jpg" alt="Games">
         So many fun games better than pizza edition and has all 2minutefootball games!
     </button>
@@ -439,18 +396,8 @@
     </div>
 
     <script>
-        // Show image overlay on page load
-        const imageOverlay = document.getElementById("image-overlay");
-
-        // Hide image overlay after 2 seconds
-        setTimeout(() => {
-            imageOverlay.classList.add("hidden");
-        }, 2000);
-
-        // Show warning modal after image overlay fades out
-        setTimeout(() => {
-            document.getElementById("warning-modal").style.display = "flex";
-        }, 3000); // 3 seconds (2 seconds for image overlay + 1 second delay)
+        // Show warning modal immediately (splash screen removed)
+        document.getElementById("warning-modal").style.display = "flex";
 
         function closeWarningModal() {
             document.getElementById("warning-modal").style.display = "none";
