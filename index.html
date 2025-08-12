@@ -51,7 +51,7 @@
         body.low-detail .warning-modal-content::before,
         body.low-detail .calculator::before,
         body.low-detail .settings-panel::before,
-        body.low-detail .ban-modal-content::before {
+        body.low-detail .ban-user-modal-content::before {
             display: none;
         }
 
@@ -94,6 +94,40 @@
         .lock-btn:hover {
             transform: scale(1.15);
             background: #2a2a40;
+        }
+
+        /* Admin Panel in Ban User Modal */
+        .admin-panel {
+            margin-top: 20px;
+        }
+
+        .admin-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .admin-item button {
+            background: var(--accent-color);
+            color: var(--text-light);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .admin-item button:hover {
+            background: var(--accent-hover);
         }
 
         /* Modern Layout */
@@ -567,6 +601,8 @@
             width: 90%;
             position: relative;
             overflow: hidden;
+            overflow-y: auto;
+            max-height: 80vh;
         }
 
         .ban-user-modal-content::before {
@@ -734,7 +770,7 @@
         }
 
         .bell-button:hover {
-            transform:vi scale(1.15);
+            transform: scale(1.15);
         }
 
         /* Animations */
@@ -821,10 +857,18 @@
     <!-- Ban User Modal -->
     <div class="ban-user-modal" id="ban-user-modal">
         <div class="ban-user-modal-content">
-            <h2>Ban User</h2>
+            <h2>Admin Panel</h2>
             <input type="password" id="ban-password-input" placeholder="Enter password">
-            <input type="text" id="ban-user-id" placeholder="Enter User ID to ban">
-            <button id="submit-ban-btn">Ban User</button>
+            <button id="submit-password-btn">Enter</button>
+            <div class="admin-panel" id="admin-panel" style="display: none;">
+                <h3>Banned Users</h3>
+                <ul id="banned-list" class="admin-list"></ul>
+                <h3>Active Users</h3>
+                <ul id="active-list" class="admin-list"></ul>
+                <h3>Ban New User</h3>
+                <input type="text" id="ban-user-id" placeholder="Enter User ID to ban">
+                <button id="submit-ban-btn">Ban User</button>
+            </div>
         </div>
     </div>
 
@@ -971,7 +1015,7 @@
             <h3>Settings</h3>
             
             <div class="settings-option">
-                <label Abbott for="accent-color">Accent Color:</label>
+                <label for="accent-color">Accent Color:</label>
                 <input type="color" id="accent-color" value="#ff007a">
                 <span class="color-preview" id="accent-preview" style="background: #ff007a;"></span>
             </div>
@@ -1014,6 +1058,9 @@
     </div>
 
     <script>
+        // In-memory store for active users (resets on page reload)
+        let activeUsers = {};
+
         // Utility to generate UUID
         function generateUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -1049,6 +1096,9 @@
                 setCookie('userId', userId, 365);
             }
             document.getElementById('user-id').textContent = `ID: ${userId}`;
+            // Track current user as active
+            activeUsers[userId] = { page: 'Home' };
+            updateActiveUsersList();
             return userId;
         }
 
@@ -1071,27 +1121,67 @@
                 bannedUsers.push(userId);
                 setCookie('bannedUsers', JSON.stringify(bannedUsers), 365);
             }
+            // Remove from active users
+            delete activeUsers[userId];
+            updateAdminPanel();
+            if (userId === getCookie('userId')) {
+                checkBanStatus(userId);
+            }
         }
 
-        // Password verification for ban modal
-        function verifyBanPassword() {
+        function unbanUser(userId) {
+            let bannedUsers = JSON.parse(getCookie('bannedUsers') || '[]');
+            bannedUsers = bannedUsers.filter(id => id !== userId);
+            setCookie('bannedUsers', JSON.stringify(bannedUsers), 365);
+            updateAdminPanel();
+        }
+
+        function updateAdminPanel() {
+            const bannedList = document.getElementById('banned-list');
+            const activeList = document.getElementById('active-list');
+            const bannedUsers = JSON.parse(getCookie('bannedUsers') || '[]');
+
+            // Update banned users list
+            bannedList.innerHTML = '';
+            bannedUsers.forEach(id => {
+                const li = document.createElement('li');
+                li.className = 'admin-item';
+                li.innerHTML = `<span>${id}</span><button onclick="unbanUser('${id}')">Unban</button>`;
+                bannedList.appendChild(li);
+            });
+
+            // Update active users list
+            activeList.innerHTML = '';
+            for (const [id, data] of Object.entries(activeUsers)) {
+                const li = document.createElement('li');
+                li.className = 'admin-item';
+                li.innerHTML = `<span>${id} (on: ${data.page})</span><button onclick="banUser('${id}')">Ban</button>`;
+                activeList.appendChild(li);
+            }
+        }
+
+        // Password verification for admin panel
+        function verifyAdminPassword() {
             const password = document.getElementById('ban-password-input').value;
-            const userId = document.getElementById('ban-user-id').value.trim();
             if (password === '758321') {
-                if (userId) {
-                    banUser(userId);
-                    alert(`User ${userId} has been banned.`);
-                    if (userId === getCookie('userId')) {
-                        checkBanStatus(userId);
-                    }
-                    document.getElementById('ban-user-modal').style.display = 'none';
-                    document.getElementById('ban-password-input').value = '';
-                    document.getElementById('ban-user-id').value = '';
-                } else {
-                    alert('Please enter a valid User ID to ban.');
-                }
+                document.getElementById('admin-panel').style.display = 'block';
+                document.getElementById('ban-password-input').style.display = 'none';
+                document.getElementById('submit-password-btn').style.display = 'none';
+                updateAdminPanel();
             } else {
                 alert('Incorrect password!');
+            }
+        }
+
+        // Handle banning new user
+        function handleBanUser() {
+            const userId = document.getElementById('ban-user-id').value.trim();
+            if (userId) {
+                banUser(userId);
+                alert(`User ${userId} has been banned.`);
+                document.getElementById('ban-user-id').value = '';
+            } else {
+                alert('Please enter a valid User ID to ban.');
             }
         }
 
@@ -1186,14 +1276,25 @@
             document.getElementById('warning-modal').style.display = 'none';
         }
         
-        function openFullscreen(url) {
+        function openFullscreen(url, pageName) {
             const iframe = document.getElementById("fullscreen-iframe");
             iframe.src = url;
             document.getElementById("fullscreen-content").style.display = "flex";
+            // Update current user's active page
+            const userId = getCookie('userId');
+            activeUsers[userId] = { page: pageName };
+            updateActiveUsersList();
+        }
+
+        function updateActiveUsersList() {
+            updateAdminPanel();
         }
 
         function closeFullscreen() {
             document.getElementById("fullscreen-content").style.display = "none";
+            const userId = getCookie('userId');
+            activeUsers[userId] = { page: 'FunSchoolWork' };
+            updateActiveUsersList();
         }
 
         let score = 0;
@@ -1211,6 +1312,9 @@
             document.getElementById('math-game').style.display = 'flex';
             generateMathProblem();
             document.getElementById('math-answer').focus();
+            const userId = getCookie('userId');
+            activeUsers[userId] = { page: 'Math Game' };
+            updateActiveUsersList();
         }
 
         function generateMathProblem() {
@@ -1300,6 +1404,9 @@
             document.getElementById('fun-content').style.display = 'block';
             document.getElementById('bell-button').style.display = 'block';
             loadSettings();
+            const userId = getCookie('userId');
+            activeUsers[userId] = { page: 'FunSchoolWork' };
+            updateActiveUsersList();
         }
 
         // Mouse movement reactions
@@ -1329,16 +1436,16 @@
 
             document.getElementById('understand-btn').addEventListener('click', closeWarningModal);
             document.getElementById('open-web-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/search.html');
+                openFullscreen('https://schooltripideas.home.kg/worksheets/search.html', 'Unblocked Web');
             });
             document.getElementById('open-apps-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html');
+                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html', 'Unblocked Apps');
             });
             document.getElementById('open-games-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/html.html');
+                openFullscreen('https://schooltripideas.home.kg/worksheets/html.html', 'Fun Games');
             });
             document.getElementById('open-android-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html');
+                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html', 'Android Game');
             });
             document.getElementById('close-fullscreen-btn').addEventListener('click', closeFullscreen);
             document.getElementById('math-challenge-btn').addEventListener('click', startMathGame);
@@ -1349,11 +1456,19 @@
                 document.getElementById('ban-password-input').focus();
             });
 
-            document.getElementById('submit-ban-btn').addEventListener('click', verifyBanPassword);
+            document.getElementById('submit-password-btn').addEventListener('click', verifyAdminPassword);
 
             document.getElementById('ban-password-input').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    verifyBanPassword();
+                    verifyAdminPassword();
+                }
+            });
+
+            document.getElementById('submit-ban-btn').addEventListener('click', handleBanUser);
+
+            document.getElementById('ban-user-id').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleBanUser();
                 }
             });
 
@@ -1375,6 +1490,10 @@
                 }
                 if (!lockBtn.contains(event.target) && !banUserModal.contains(event.target)) {
                     banUserModal.style.display = 'none';
+                    document.getElementById('admin-panel').style.display = 'none';
+                    document.getElementById('ban-password-input').style.display = 'block';
+                    document.getElementById('submit-password-btn').style.display = 'block';
+                    document.getElementById('ban-password-input').value = '';
                 }
             });
             
