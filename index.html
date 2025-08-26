@@ -70,6 +70,12 @@
             z-index: 5000;
         }
 
+        .provider-display {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
         /* Lock Button */
         .lock-btn {
             position: fixed;
@@ -841,7 +847,10 @@
 </head>
 <body>
     <!-- User ID Display -->
-    <div class="user-id" id="user-id">ID: Loading...</div>
+    <div class="user-id" id="user-id">
+        <div>ID: Loading...</div>
+        <div class="provider-display" id="provider-display">Provider: Loading...</div>
+    </div>
 
     <!-- Bell Button -->
     <button class="bell-button" id="bell-button" onclick="location.reload()">🔔</button>
@@ -1031,6 +1040,16 @@
             </div>
 
             <div class="settings-option">
+                <label for="link-provider">Link Provider:</label>
+                <select id="link-provider">
+                    <option value="schooltripideas.home.kg">schooltripideas.home.kg</option>
+                    <option value="coolerschool.burgermap.org">coolerschool.burgermap.org</option>
+                    <option value="coolerschool.computersforpeace.net">coolerschool.computersforpeace.net</option>
+                    <option value="coolerschool.justlearning.net">coolerschool.justlearning.net</option>
+                </select>
+            </div>
+
+            <div class="settings-option">
                 <label for="low-detail-mode">Low Detail Mode:</label>
                 <input type="checkbox" id="low-detail-mode">
             </div>
@@ -1061,6 +1080,14 @@
         // In-memory store for active users (resets on page reload)
         let activeUsers = {};
 
+        // List of link providers
+        const linkProviders = [
+            'schooltripideas.home.kg',
+            'coolerschool.burgermap.org',
+            'coolerschool.computersforpeace.net',
+            'coolerschool.justlearning.net'
+        ];
+
         // Utility to generate UUID
         function generateUUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -1088,18 +1115,33 @@
             return null;
         }
 
-        // Initialize user ID
+        // Initialize user ID and provider display
         function initializeUserID() {
             let userId = getCookie('userId');
             if (!userId) {
                 userId = generateUUID();
                 setCookie('userId', userId, 365);
             }
-            document.getElementById('user-id').textContent = `ID: ${userId}`;
+            document.getElementById('user-id').children[0].textContent = `ID: ${userId}`;
             // Track current user as active
             activeUsers[userId] = { page: 'Home' };
             updateActiveUsersList();
+            updateProviderDisplay();
             return userId;
+        }
+
+        // Update provider display
+        function updateProviderDisplay() {
+            const linkProvider = getCookie('linkProvider') || linkProviders[0];
+            const providerDisplay = document.getElementById('provider-display');
+            if (providerDisplay) {
+                providerDisplay.textContent = `Provider: ${linkProvider}`;
+            }
+            // Update the dropdown to match the current provider
+            const linkProviderSelect = document.getElementById('link-provider');
+            if (linkProviderSelect) {
+                linkProviderSelect.value = linkProvider;
+            }
         }
 
         // Ban system
@@ -1199,6 +1241,7 @@
             const lowDetail = getCookie('lowDetail') === 'true';
             const fontSize = getCookie('fontSize') || 'medium';
             const animationSpeed = getCookie('animationSpeed') || 'normal';
+            const linkProvider = getCookie('linkProvider') || linkProviders[0];
             
             document.documentElement.style.setProperty('--accent-color', accentColor);
             document.documentElement.style.setProperty('--accent-hover', adjustColor(accentColor, 40));
@@ -1211,10 +1254,12 @@
             document.getElementById('low-detail-mode').checked = lowDetail;
             document.getElementById('font-size').value = fontSize;
             document.getElementById('animation-speed').value = animationSpeed;
+            document.getElementById('link-provider').value = linkProvider;
 
             document.body.classList.toggle('low-detail', lowDetail);
             applyFontSize(fontSize);
             applyAnimationSpeed(animationSpeed);
+            updateProviderDisplay();
         }
         
         function adjustColor(color, amount) {
@@ -1248,6 +1293,7 @@
             const lowDetail = document.getElementById('low-detail-mode').checked;
             const fontSize = document.getElementById('font-size').value;
             const animationSpeed = document.getElementById('animation-speed').value;
+            const linkProvider = document.getElementById('link-provider').value;
             
             setCookie('accentColor', accentColor, 365);
             setCookie('bgStart', bgStart, 365);
@@ -1255,6 +1301,7 @@
             setCookie('lowDetail', lowDetail, 365);
             setCookie('fontSize', fontSize, 365);
             setCookie('animationSpeed', animationSpeed, 365);
+            setCookie('linkProvider', linkProvider, 365);
             
             document.documentElement.style.setProperty('--accent-color', accentColor);
             document.documentElement.style.setProperty('--accent-hover', adjustColor(accentColor, 40));
@@ -1264,6 +1311,7 @@
             document.body.classList.toggle('low-detail', lowDetail);
             applyFontSize(fontSize);
             applyAnimationSpeed(animationSpeed);
+            updateProviderDisplay(); // Ensure provider updates after saving
             
             document.getElementById('settings-panel').style.display = 'none';
         }
@@ -1276,7 +1324,9 @@
             document.getElementById('warning-modal').style.display = 'none';
         }
         
-        function openFullscreen(url, pageName) {
+        function openFullscreen(page, pageName) {
+            const linkProvider = getCookie('linkProvider') || linkProviders[0];
+            const url = `https://${linkProvider}/worksheets/${page}`;
             const iframe = document.getElementById("fullscreen-iframe");
             iframe.src = url;
             document.getElementById("fullscreen-content").style.display = "flex";
@@ -1431,21 +1481,32 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Populate link provider dropdown only once
+            const linkProviderSelect = document.getElementById('link-provider');
+            if (linkProviderSelect && !linkProviderSelect.hasChildNodes()) {
+                linkProviders.forEach(provider => {
+                    const option = document.createElement('option');
+                    option.value = provider;
+                    option.textContent = provider;
+                    linkProviderSelect.appendChild(option);
+                });
+            }
+
             const userId = initializeUserID();
             if (checkBanStatus(userId)) return;
 
             document.getElementById('understand-btn').addEventListener('click', closeWarningModal);
             document.getElementById('open-web-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/search.html', 'Unblocked Web');
+                openFullscreen('search.html', 'Unblocked Web');
             });
             document.getElementById('open-apps-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html', 'Unblocked Apps');
+                openFullscreen('apps.html', 'Unblocked Apps');
             });
             document.getElementById('open-games-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/html.html', 'Fun Games');
+                openFullscreen('html.html', 'Fun Games');
             });
             document.getElementById('open-android-btn').addEventListener('click', function() {
-                openFullscreen('https://schooltripideas.home.kg/worksheets/apps.html', 'Android Game');
+                openFullscreen('apps.html', 'Android Game');
             });
             document.getElementById('close-fullscreen-btn').addEventListener('click', closeFullscreen);
             document.getElementById('math-challenge-btn').addEventListener('click', startMathGame);
